@@ -65,17 +65,19 @@ if st.button("Predict"):
         st.warning("Input doesn't contain enough meaningful words. Please write a proper review.")
         st.caption("Hint: Please enter a detailed review mentioning drug name, condition, or symptoms.")
 
-    if st.button("Analyze Sentiment"):
-        blob = TextBlob(user_input)
-        polarity = blob.sentiment.polarity
-        sentiment = "Positive 😊" 
-        if polarity > 0 
-        else:
-            "Negative 😞" 
-        if polarity < 0 
-        else:
-            "Neutral 😐"
-        st.info(f"**Sentiment:** {sentiment}")
+if st.button("Analyze Sentiment"):
+    blob = TextBlob(user_input)
+    polarity = blob.sentiment.polarity
+
+    if polarity > 0:
+        sentiment = "Positive 😊"
+    elif polarity < 0:
+        sentiment = "Negative 😞"
+    else:
+        sentiment = "Neutral 😐"
+
+    st.write(f"**Sentiment:** {sentiment}")
+
                
     if st.button('Generate WordCloud of Review'):
         cleaned = clean_text(user_input)
