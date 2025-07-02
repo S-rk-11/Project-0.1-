@@ -69,9 +69,11 @@ with tab1:
         polarity = blob.sentiment.polarity
         sentiment = "Positive 😊" 
         if polarity > 0 
-           else "Negative 😞" 
+        else:
+            "Negative 😞" 
         if polarity < 0 
-           else "Neutral 😐"
+        else:
+            "Neutral 😐"
         st.info(f"**Sentiment:** {sentiment}")
                
     if st.button('Generate WordCloud of Review'):
