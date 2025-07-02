@@ -42,7 +42,7 @@ text_df = pd.read_csv("wordcloud.csv")
 tab0, tab1 = st.tabs(["WordCloud", "Predict Disease"])
     
 with tab0:
-    st.title('WordCloud for Reviews')
+    st.title('WordCloud')
     if st.button("Generate Word Cloud"):
         text = " ".join(text_df['full_text'].astype(str))
         wordcloud = WordCloud(width=1000, height=600, background_color='black', colormap='Pastel1').generate(text)
@@ -61,9 +61,9 @@ if st.button("Predict"):
         pred = model.predict([cleaned_input])
         label = label_dict[pred[0]]
         st.success(f"Predicted Condition: {label}")
+        st.caption("Hint: Please enter a detailed review mentioning drug name, condition, or symptoms.")
     else:
         st.warning("Input doesn't contain enough meaningful words. Please write a proper review.")
-        st.caption("Hint: Please enter a detailed review mentioning drug name, condition, or symptoms.")
 
 if st.button("Analyze Sentiment"):
     blob = TextBlob(user_input)
