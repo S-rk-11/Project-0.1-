@@ -56,12 +56,10 @@ with tab1:
     user_input = st.text_input("Enter your review:")
     
     if st.button("Predict"):
-    cleaned_input = clean_text(user_input)
-    
-    if cleaned_input.strip():  # Check if cleaned text is not empty
-        pred = model.predict([cleaned_input])
-        label = label_dict[pred[0]]
-        st.success(f"Predicted Condition: {label}")
+       cleaned_input = clean_text(user_input)
+       pred = model.predict([cleaned_input])
+       label = label_dict[pred[0]]
+       st.success(f"Predicted Condition: {label}")
       else:
         st.warning("Input doesn't contain enough meaningful words. Please write a proper review.")
         st.caption("Hint: Please enter a detailed review mentioning drug name, condition, or symptoms.")
