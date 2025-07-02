@@ -55,15 +55,16 @@ with tab1:
     st.title('Disease Prediction With Review')
     user_input = st.text_input("Enter your review:")
     
-    if st.button("Predict Disease"):
-        cleaned_input = clean_text(user_input)
-        if cleaned_input.strip():
-            pred = model.predict([user_input])[0]
-            label = label_dict[pred]
-            st.success(f"Predicted Condition: **{label}**")
-        else:
-            st.warning("Please enter a valid review.")
-        
+if st.button("Predict"):
+    cleaned_input = clean_text(user_input)
+    if cleaned_input.strip():  # Check if cleaned text is not empty
+        pred = model.predict([cleaned_input])
+        label = label_dict[pred[0]]
+        st.success(f"Predicted Condition: {label}")
+    else:
+        st.warning("Input doesn't contain enough meaningful words. Please write a proper review.")
+        st.caption("Hint: Please enter a detailed review mentioning drug name, condition, or symptoms.")
+
     if st.button("Analyze Sentiment"):
         blob = TextBlob(user_input)
         polarity = blob.sentiment.polarity
