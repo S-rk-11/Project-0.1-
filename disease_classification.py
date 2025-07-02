@@ -9,10 +9,11 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from textblob import TextBlob
 
+# Download NLTK resources
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-# Define the cleaning function exactly as before
+# Preprocessing
 stop_words = set(stopwords.words('english'))
 lemma = WordNetLemmatizer()
 
@@ -22,67 +23,60 @@ def clean_text(text):
     words = text.split()
     words = [lemma.lemmatize(w) for w in words if w not in stop_words]
     return ' '.join(words)
-
-tab0, tab1 = st.tabs(["WordCloud","Predict Disease"])
-
-text_df = pd.read_csv("wordcloud.csv")
-
+    
+# Load model
 with open('disease_model.pkl', 'rb') as file:
     model = pickle.load(file)
-
+    
+# Label dictionary
 label_dict = {
   0: 'Depression',
   1: 'Diabetes, Type 2',
   2: 'High Blood Pressure'
 }
+
+# Load WordCloud data
+text_df = pd.read_csv("wordcloud.csv")
+
+# Streamlit UI
+tab0, tab1 = st.tabs(["WordCloud", "Predict Disease"])
+    
 with tab0:
-    st.title('WordCloud')
+    st.title('WordCloud for Reviews')
     if st.button("Generate Word Cloud"):
         text = " ".join(text_df['full_text'].astype(str))
-        # Generate word cloud
         wordcloud = WordCloud(width=1000, height=600, background_color='black', colormap='Pastel1').generate(text)
-        # Create matplotlib figure
         fig, ax = plt.subplots(figsize=(10, 5))
         ax.imshow(wordcloud)
         ax.axis('off')
-        # Display in Streamlit
         st.pyplot(fig)
 
 with tab1:
     st.title('Disease Prediction With Review')
     user_input = st.text_input("Enter your review:")
-    if st.button("Predict"):
+    
+    if st.button("Predict Disease"):
         cleaned_input = clean_text(user_input)
-        pred = model.predict([user_input])
-        label = label_dict[pred[0]]
-        st.success(f"Predicted Condition: {label}")
-    else:
-        st.info("Please enter a review to predict the condition.")
+        if cleaned_input.strip():
+            pred = model.predict([user_input])[0]
+            label = label_dict[pred]
+            st.success(f"Predicted Condition: **{label}**")
+        else:
+            st.warning("Please enter a valid review.")
         
     if st.button("Analyze Sentiment"):
         blob = TextBlob(user_input)
-        # Get sentiment polarity
         polarity = blob.sentiment.polarity
-        # Interpretation
-        if polarity > 0:
-            sentiment = "Positive 😊"
-        elif polarity < 0:
-            sentiment = "Negative 😞"
-        else:
-            sentiment = "Neutral 😐"
-
-        st.write(f"**Sentiment:** {sentiment}")
-        
-    if st.button('Generate WordCloud'):
+        sentiment = "Positive 😊" if polarity > 0 else "Negative 😞" if polarity < 0 else "Neutral 😐"
+        st.info(f"**Sentiment:** {sentiment}")
+               
+    if st.button('Generate WordCloud of Review'):
         cleaned = clean_text(user_input)
-        if cleaned.strip():  # Check that text is not empty after cleaning
-            st.markdown('**WordCloud for User Input**')
-            wordcloud_user = WordCloud(width=800, height=400, background_color='black',
-                                       colormap='Pastel1').generate(cleaned)
+        if cleaned.strip():
+            wordcloud_user = WordCloud(width=800, height=400, background_color='black', colormap='Pastel1').generate(cleaned)
             fig1, ax1 = plt.subplots(figsize=(10, 5))
             ax1.imshow(wordcloud_user)
             ax1.axis('off')
             st.pyplot(fig1)
         else:
-            st.warning("No meaningful words left after cleaning. Try entering more descriptive text.")
-
+            st.warning("No meaningful words found. Try entering a longer review.")
