@@ -52,6 +52,7 @@ with tab1:
     st.title('Disease Prediction With Review')
     user_input = st.text_input("Enter your review:")
     if st.button("Predict"):
+        cleaned_input = clean_text(user_input)
         pred = model.predict([user_input])
         label = label_dict[pred[0]]
         st.success(f"Predicted Condition: {label}")
