@@ -66,15 +66,15 @@ with tab1:
             st.caption("Hint: Please enter a detailed review mentioning drug name, condition, or symptoms.")
 
     if st.button("Analyze Sentiment"):
-        blob = TextBlob(user_input)
-        polarity = blob.sentiment.polarity
-        if polarity > 0:
-            sentiment = "Positive 😊"
-        elif polarity < 0:
-            sentiment = "Negative 😞"
-        else:
-            sentiment = "Neutral 😐"
-         st.write(f"**Sentiment:** {sentiment}")
+       blob = TextBlob(user_input)
+       polarity = blob.sentiment.polarity
+       if polarity > 0:
+           sentiment = "Positive 😊"
+       elif polarity < 0:
+           sentiment = "Negative 😞"
+       else:
+           sentiment = "Neutral 😐"
+       st.write(f"**Sentiment:** {sentiment}")
 
     if st.button('Generate WordCloud of Review'):
         cleaned = clean_text(user_input)
