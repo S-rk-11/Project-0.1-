@@ -42,7 +42,7 @@ text_df = pd.read_csv("wordcloud.csv")
 tab0, tab1 = st.tabs(["WordCloud", "Predict Disease"])
     
 with tab0:
-    st.title('WordCloud for Reviews')
+    st.title('WordCloud')
     if st.button("Generate Word Cloud"):
         text = " ".join(text_df['full_text'].astype(str))
         wordcloud = WordCloud(width=1000, height=600, background_color='black', colormap='Pastel1').generate(text)
@@ -76,8 +76,6 @@ if st.button("Analyze Sentiment"):
         sentiment = "Neutral 😐"
 
     st.write(f"**Sentiment:** {sentiment}")
-
-               
     if st.button('Generate WordCloud of Review'):
         cleaned = clean_text(user_input)
         if cleaned.strip():
